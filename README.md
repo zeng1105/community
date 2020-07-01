@@ -34,3 +34,6 @@ create table USER
 	constraint USER_PK primary key (ID)
 );
 ```
+```bash
+mvn flyway:migrate
+```
