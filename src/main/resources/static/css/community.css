@@ -10,3 +10,15 @@ body{
     float: right;
     margin-bottom: 15px;
 }
+
+.media-object{
+    width: 40px;
+    height: 42px;
+    border-radius: 50px;
+}
+
+.text-desc{
+    font-size: 12px;
+    font-weight: normal;
+    color: #999;
+}
