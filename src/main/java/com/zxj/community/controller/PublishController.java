@@ -1,7 +1,6 @@
 package com.zxj.community.controller;
 
 import com.zxj.community.mapper.QuestionMapper;
-import com.zxj.community.mapper.UserMapper;
 import com.zxj.community.model.Question;
 import com.zxj.community.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 @Controller
@@ -19,9 +17,6 @@ public class PublishController {
 
     @Autowired
     private QuestionMapper questionMapper;
-
-    @Autowired
-    private UserMapper userMapper;
 
     @GetMapping("/publish")//表示是get请求
     public String publish(){
@@ -52,20 +47,7 @@ public class PublishController {
             return "publish";
         }
 
-        User user = null;//发布之前需要判定用户是否登录
-        Cookie[] cookies = request.getCookies();//先获取所有的cookie
-        if(cookies != null){//增强for之前最好做非空判断
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("token")){//找到我们想要的cookie，获取用户信息
-                    String token = cookie.getValue();
-                    user = userMapper.findByToken(token);
-                    if(user != null){
-                        request.getSession().setAttribute("user", user);//如果user存在，那么久写入session以便展示“用户姓名”；否则还是显示登陆。
-                    }
-                    break;
-                }
-            }
-        }
+        User user = (User) request.getSession().getAttribute("user");
         if(user == null){
             model.addAttribute("error","用户未登录");
             return "publish";
