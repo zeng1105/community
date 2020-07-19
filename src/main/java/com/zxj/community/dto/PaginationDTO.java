@@ -2,6 +2,7 @@ package com.zxj.community.dto;
 
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -19,7 +20,7 @@ public class PaginationDTO {
     private boolean showEndPage;
     private Integer page;//页码
     private Integer totalPage;
-    private List<Integer> pages;
+    private List<Integer> pages = new ArrayList<>();
     private List<QuestionDTO> questionDTOList;
 
     /**
@@ -29,7 +30,6 @@ public class PaginationDTO {
      * @param totalPage   页码容量（一页最多显示几个）
      */
     public void setPagination(Integer totalPage, Integer page) {
-        pages = new LinkedList<>();//初始化容器
         this.page = page;
         this.totalPage = totalPage;
         //页码显示思路，显示5个，页码左边2个右边2个。如果不足不显示。
