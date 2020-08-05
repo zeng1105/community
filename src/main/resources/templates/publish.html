@@ -3,12 +3,11 @@
 <head>
     <title>发布-社区项目入门</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/bootstrap-theme.min.css">
-    <link rel="stylesheet" href="css/community.css"><!--快速引入样式方法，直接从左边项目列表将文件拉过来即可，然后微改href的内容-->
-    <script src="js/jquery-3.4.1.min.js"></script>
-    <script src="js/bootstrap.min.js" type="application/javascript"></script>
-
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="/css/community.css"><!--快速引入样式方法，直接从左边项目列表将文件拉过来即可，然后微改href的内容-->
+    <script src="/js/jquery-3.4.1.min.js"></script>
+    <script src="/js/bootstrap.min.js" type="application/javascript"></script>
 </head>
 
 <body>
@@ -23,6 +22,7 @@
             <hr><!--hr是显示分隔线-->
 
             <form action="/publish" method="post">
+                <input type="hidden" name="id" th:value="${id}">
                 <!--一个div标签就是一个设计内容-->
                 <div class="form-group">
                     <label for="title">问题标题(简要扼要)</label>
@@ -31,13 +31,12 @@
                            placeholder="问题标题...">
                 </div>
                 <div class="form-group">
-                    <label for="title">问题补充(必填，请按右侧提示)</label>
+                    <label for="description">问题补充(必填，请按右侧提示)</label>
                     <!--textarea文本域-->
-                    <textarea name="description" id="description" th:value="${description}" class="form-control"
-                              cols="30" rows="10"></textarea>
+                    <textarea name="description" id="description" th:text="${description}" class="form-control" cols="30" rows="10"></textarea>
                 </div>
                 <div class="form-group">
-                    <label for="title">添加标签</label>
+                    <label for="tag">添加标签</label>
                     <!--iuput输入框-->
                     <input type="text" class="form-control" id="tag" th:value="${tag}" name="tag"
                            placeholder="输入标签并以,隔开">
