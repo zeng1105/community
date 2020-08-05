@@ -1,10 +1,7 @@
 package com.zxj.community.mapper;
 
 import com.zxj.community.model.User;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 @Mapper
 public interface UserMapper {
@@ -19,4 +16,10 @@ public interface UserMapper {
     //这里传入question对象的creatorId，因为就是user类的id。
     @Select("Select * from user where id = #{id}")
     User findById(@Param("id") Long creatorId);
+
+    @Select("Select * from user where account_id = #{accountId}")
+    User findByAccountId(@Param("accountId") String accountId);
+
+    @Update("Update user set name = #{name}, token = #{token}, gmt_create = #{gmtCreate}, avatar_url = #{avatarUrl} where id = #{id}")
+    void update(User user);
 }

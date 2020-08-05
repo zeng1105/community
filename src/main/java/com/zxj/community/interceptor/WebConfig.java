@@ -7,6 +7,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 //@EnableWebMvc 去掉该项注释是为防止拦截静态资源文件，
+/**
+ * 拦截器的配置类
+ */
 public class WebConfig implements WebMvcConfigurer {
 
     @Autowired

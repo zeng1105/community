@@ -2,9 +2,9 @@ package com.zxj.community.controller;
 
 import com.zxj.community.dto.AccessTokenDTO;
 import com.zxj.community.dto.GithubUser;
-import com.zxj.community.mapper.UserMapper;
 import com.zxj.community.model.User;
 import com.zxj.community.provider.GithubProvider;
+import com.zxj.community.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.UUID;
 
@@ -22,7 +23,7 @@ public class AuthorizeController {
     private GithubProvider githubProvider;
 
     @Autowired
-    private UserMapper userMapper;
+    private UserService userService;
 
     //通过在配置文件中设置固定参数，减少代码耦合性
     @Value("${github.client.id}")
@@ -48,7 +49,7 @@ public class AuthorizeController {
         String accessToken = githubProvider.getAccessToken(accessTokenDTO);
         GithubUser githubUser = githubProvider.getUser(accessToken);
         //当使用Github登录成功以后，登录判断
-        if(githubUser!=null){
+        if(githubUser != null && githubUser.getId() != null){
             //登录成功,获取用户信息
             User user = new User();
             String token = UUID.randomUUID().toString();
@@ -56,11 +57,8 @@ public class AuthorizeController {
             user.setToken(token);
             user.setName(githubUser.getName());
             user.setAccountId(String.valueOf(githubUser.getId()));
-            user.setGmtCreate(System.currentTimeMillis());
-            user.setGmtModified(user.getGmtCreate());
             user.setAvatarUrl(githubUser.getAvatarUrl());
-            //将用户对象存入数据库中
-            userMapper.insert(user);
+            userService.createOrUpdate(user);
             //然后将这个token放入cookie中，便于之后的校验
             response.addCookie(new Cookie("token", token));
             return "redirect:/";//重定向回到首页。（不请求转发防止地址信息暴露）
@@ -68,5 +66,15 @@ public class AuthorizeController {
             //登录失败
             return "redirect:/";
         }
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request,
+                         HttpServletResponse response){
+        request.getSession().removeAttribute("user");
+        Cookie cookie = new Cookie("token", null);
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+        return "redirect:/";
     }
 }

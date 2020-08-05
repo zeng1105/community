@@ -12,7 +12,10 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@Service//为了使Autowired有效
+@Service//为了使Autowired有效、
+/**
+ * 最好这里采用实现HandlerInterceptorAdaptor的方式
+ */
 public class SessionInterceptor implements HandlerInterceptor {
 
     @Autowired
